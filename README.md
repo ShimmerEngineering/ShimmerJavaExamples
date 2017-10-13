@@ -1,8 +1,5 @@
 # Shimmer Java Examples
-
-The Shimmer Java Examples is currently in a BETA development state, users are free to use and provide feedback. 
-
-There are a number of changes which will be made before the official release, these changes are listed below, note we are in the process of making these updates and BETA users are encouraged to check for updates here on Github
+A number of Java examples are provided showing how to connect,configure and stream from a Bluetooth supported Shimmer device.
 
 # Importing Via Gradle
 This api can also be imported using gradle, please include the following repository in your build.gradle file 
@@ -17,7 +14,7 @@ allprojects {
 }
 ```
 Most recent uploaded library can be found here:-
-https://bintray.com/shimmerengineering/Shimmer/shimmerandroiddriver
+https://bintray.com/shimmerengineering/Shimmer/shimmerdriverpc
 
 
 # The following license applies to the source code within this repository/project.
