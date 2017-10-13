@@ -2,7 +2,7 @@
 A number of Java examples are provided showing how to connect,configure and stream from a Bluetooth supported Shimmer device.
 
 # Importing Via Gradle
-This api can also be imported using gradle, please include the following repository in your build.gradle file 
+The Shimmer API used by this Java Examples can be imported using gradle, please include the following repository in your build.gradle file 
 ```
 allprojects {
     repositories {
