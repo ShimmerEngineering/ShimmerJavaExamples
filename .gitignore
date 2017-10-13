@@ -1,0 +1,55 @@
+*.pydevproject
+.metadata
+.gradle
+bin/
+tmp/
+out/
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+# .settings/
+.loadpath
+
+# Built application files
+/*/build/
+
+# User-specific configurations
+.idea/libraries/
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/.name
+.idea/compiler.xml
+.idea/copyright/profiles_settings.xml
+.idea/encodings.xml
+.idea/misc.xml
+.idea/modules.xml
+.idea/scopes/scope_settings.xml
+.idea/vcs.xml
+*.iml
+
+# External tool builders
+.externalToolBuilders/
+
+# Locally stored "Eclipse launch configurations"
+#*.launch
+
+# CDT-specific
+.cproject
+
+# PDT-specific
+.buildpath
+
+# sbteclipse plugin
+.target
+
+# TeXlipse plugin
+.texlipse
+out/production/JavaShimmerConnect/com/shimmerresearch/ShimmerCapture/ShimmerCapture$1.class
+out/production/ShimmerPCInstrumentDriver/com/shimmerresearch/pcdriver/DockException.class
+
+JavaShimmerConnect/.settings/org.eclipse.jdt.core.prefs
+ShimmerDriver/.settings/org.eclipse.jdt.core.prefs
+ShimmerAndroidInstrumentDriver/gen/com/shimmerresearch/androidinstrumentdriver/BuildConfig.java
+ShimmerAndroidInstrumentDriver/gen/com/shimmerresearch/androidinstrumentdriver/R.java
