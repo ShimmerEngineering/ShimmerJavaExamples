@@ -16,6 +16,12 @@ allprojects {
 Most recent uploaded library can be found here:-
 https://bintray.com/shimmerengineering/Shimmer/shimmerdriverpc
 
+# Linux Bluetooth Pairing And Using the Jar Application
+1) first install Bluetooth Manager : sudo apt-get install blueman
+2) next open Bluetooth Manager and search for devices
+3) right click on the device you want to use and choose pair, note the Bluetooth pairing key is 1234
+4) once paired click setup, and connect to serial port, at this stage you should see the Bluetooth come on permanently on the Shimmer device, also you should see a pop up indicating /dev/rfcommx
+5) now you can open the exported jar (*e.g. SensorMapsExample*) and connect to that port /dev/rfcommx use **sudo** when running *sudo java -jar X.jar* otherwise the application will throw an error when connecting to the Shimmer device
 
 # The following license applies to the source code within this repository/project.
 Copyright (c) 2017, Shimmer Research, Ltd. All rights reserved
