@@ -23,6 +23,15 @@ https://bintray.com/shimmerengineering/Shimmer/shimmerdriverpc
 4) once paired click setup, and connect to serial port, at this stage you should see the Bluetooth come on permanently on the Shimmer device, also you should see a pop up indicating /dev/rfcommx
 5) now you can open the exported jar (*e.g. SensorMapsExample*) and connect to that port /dev/rfcommx use **sudo** when running *sudo java -jar X.jar* otherwise the application will throw an error when connecting to the Shimmer device
 
+# Known Issues
+1) Update JSSC from 2.8.0 to 2.9.1 https://github.com/java-native/jssc/releases
+ EXCEPTION_ACCESS_VIOLATION (0xc0000005) at pc=0x000000007110b5db, pid=36460, tid=30304#
+ JRE version: Java(TM) SE Runtime Environment (13.0.1+9) (build 13.0.1+9)
+ Java VM: Java HotSpot(TM) 64-Bit Server VM (13.0.1+9, mixed mode, sharing, tiered, compressed oops, g1 gc, windows-amd64)
+ Problematic frame:
+ C  [jSSC-2.8_x86_64.dll+0xb5db]
+
+
 # The following license applies to the source code within this repository/project.
 Copyright (c) 2017, Shimmer Research, Ltd. All rights reserved
 
