@@ -24,7 +24,8 @@ https://bintray.com/shimmerengineering/Shimmer/shimmerdriverpc
 5) now you can open the exported jar (*e.g. SensorMapsExample*) and connect to that port /dev/rfcommx use **sudo** when running *sudo java -jar X.jar* otherwise the application will throw an error when connecting to the Shimmer device
 
 # Known Issues
-1) Update JSSC from 2.8.0 to 2.9.1 https://github.com/java-native/jssc/releases
+1) Update JSSC from 2.8.0 to 2.9.1 https://github.com/java-native/jssc/releases , if the following error below is seen
+
  EXCEPTION_ACCESS_VIOLATION (0xc0000005) at pc=0x000000007110b5db, pid=36460, tid=30304#
  JRE version: Java(TM) SE Runtime Environment (13.0.1+9) (build 13.0.1+9)
  Java VM: Java HotSpot(TM) 64-Bit Server VM (13.0.1+9, mixed mode, sharing, tiered, compressed oops, g1 gc, windows-amd64)
