@@ -1,23 +1,40 @@
 # Important ~ Migration to JFrog
-With Bintray being sunset, we are currently in the process of moving to the use of JFrog. As a test, this is a prelimeneary branch of which you can use to test your applications. Please note this is not the final version as we will be doing more refactoring and updates that have long been scheduled. Should you face any problem please do not hesitate to contact us. Eventually the goal will have the master branch updated and using JFrog. We apologize for any inconvenience caused.
+With Bintray being sunset, we are currently in the process of moving to the use of JFrog. As a test, this is a preliminary branch of which you can use to test your applications. Please note this is not the final version as we will be doing more refactoring and updates that have long been scheduled. Should you face any problem please do not hesitate to contact us. Eventually the goal will be to have the master branch updated and using JFrog. We apologize for any inconvenience caused.
+
+# JFrog Gradle Settings
+The gradle file for the example ShimmerBasicExamples have been updated accordingly to the following:-
+
+repositories:-
+
+```
+maven {
+ url 'https://shimmersensing.jfrog.io/artifactory/dummyLcl'
+}
+```
+dependencies:-
+```
+compile(group: 'com.shimmersensing', name: 'rmshimmerdriverpc', version: '1.3')
+```
+
+For further info 
+https://shimmersensing.jfrog.io/ui/repos/tree/General/dummyLcl%2Fcom%2Fshimmersensing%2Frmshimmerdriverpc%2F1.3%2Frmshimmerdriverpc-1.3.jar
+
+# Bintray Sunset
+The following ways of getting the library is **deprecated**
+repositories:-
+
+```
+ maven {
+        url  "http://dl.bintray.com/shimmerengineering/Shimmer"
+    }
+```
+dependencies:-
+```
+compile 'com.shimmerresearch.pcdriver:ShimmerDriverPC:0.9.3beta'
+```
 
 # Shimmer Java Examples
 A number of Java examples are provided showing how to connect,configure and stream from a Bluetooth supported Shimmer device.
-
-# Importing Via Gradle
-The Shimmer API used by this Java Examples can be imported using gradle, please include the following repository in your build.gradle file 
-```
-allprojects {
-    repositories {
-        jcenter()
-        maven {
-            url  "http://dl.bintray.com/shimmerengineering/Shimmer"
-        }
-    }
-}
-```
-Most recent uploaded library can be found here:-
-https://bintray.com/shimmerengineering/Shimmer/shimmerdriverpc
 
 # Linux Bluetooth Pairing And Using the Jar Application
 1) first install Bluetooth Manager : sudo apt-get install blueman
