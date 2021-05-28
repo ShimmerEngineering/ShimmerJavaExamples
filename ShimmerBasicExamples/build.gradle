@@ -19,7 +19,7 @@ repositories {
        dirs 'libs'
    }
        maven {
-        url  "http://dl.bintray.com/shimmerengineering/Shimmer"
+        url 'https://shimmersensing.jfrog.io/artifactory/ShimmerAPI'
     }
 }
 
@@ -27,12 +27,12 @@ repositories {
 dependencies {
     // The production code uses the SLF4J logging API at compile time
     compile 'org.slf4j:slf4j-api:1.7.21'
+	compile(group: 'com.shimmersensing', name: 'ShimmerDriverPC', version: '0.9.4beta')
+    compile name: 'ShimmerBiophysicalProcessingLibrary_Rev_0_11'
 
     // Declare the dependency for your favourite test framework you want to use in your tests.
     // TestNG is also supported by the Gradle Test task. Just change the
     // testCompile dependency to testCompile 'org.testng:testng:6.8.1' and add
     // 'test.useTestNG()' to your build script.
     testCompile 'junit:junit:4.12'
-	compile 'com.shimmerresearch.pcdriver:ShimmerDriverPC:0.9.3beta'
-    compile name: 'ShimmerBiophysicalProcessingLibrary_Rev_0_11'
 }
