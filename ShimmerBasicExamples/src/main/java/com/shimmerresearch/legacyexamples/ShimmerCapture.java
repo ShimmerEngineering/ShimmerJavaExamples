@@ -1191,7 +1191,7 @@ public class ShimmerCapture extends BasicProcessWithCallBack{
 		} else {
 			chckbx5VReg.setSelected(false);
 		}
-		if (mShimmer.is3DOrientatioEnabled()){
+		if (mShimmer.is3DOrientationEnabled()){
 			chckbx3DOrientation.setSelected(true);
 		} else {
 			chckbx3DOrientation.setSelected(false);

@@ -19,8 +19,7 @@ repositories {
        dirs 'libs'
    }
        maven {
-        //url  "http://dl.bintray.com/shimmerengineering/Shimmer"
-        url 'https://shimmersensing.jfrog.io/artifactory/dummyLcl'
+        url 'https://shimmersensing.jfrog.io/artifactory/ShimmerAPI'
     }
 }
 
@@ -35,6 +34,6 @@ dependencies {
     // 'test.useTestNG()' to your build script.
     testCompile 'junit:junit:4.12'
 	//compile 'com.shimmerresearch.pcdriver:ShimmerDriverPC:0.9.3beta'
-	compile(group: 'com.shimmersensing', name: 'rmshimmerdriverpc', version: '1.3')
+	compile(group: 'com.shimmersensing', name: 'ShimmerDriverPC', version: '0.9.4beta')
     compile name: 'ShimmerBiophysicalProcessingLibrary_Rev_0_11'
 }
