@@ -1,5 +1,5 @@
 # Important ~ Migration to JFrog
-With Bintray being sunset, we are currently in the process of moving to the use of JFrog. As a test, this is a preliminary branch of which you can use to test your applications. Please note this is not the final version as we will be doing more refactoring and updates that have long been scheduled. Should you face any problem please do not hesitate to contact us. Eventually the goal will be to have the master branch updated and using JFrog. We apologize for any inconvenience caused.
+With Bintray being sunset, we have migrated to the use of JFrog. Should you face any problems please do not hesitate to contact us. We apologize for any inconvenience caused.
 
 # JFrog Gradle Settings
 The gradle file for the example ShimmerBasicExamples have been updated accordingly to the following:-
@@ -8,16 +8,16 @@ repositories:-
 
 ```
 maven {
- url 'https://shimmersensing.jfrog.io/artifactory/dummyLcl'
+ url 'https://shimmersensing.jfrog.io/artifactory/ShimmerAPI'
 }
 ```
 dependencies:-
 ```
-compile(group: 'com.shimmersensing', name: 'rmshimmerdriverpc', version: '1.3')
+compile(group: 'com.shimmersensing', name: 'ShimmerDriverPC', version: '0.9.4beta')
 ```
 
 For further info 
-https://shimmersensing.jfrog.io/ui/repos/tree/General/dummyLcl%2Fcom%2Fshimmersensing%2Frmshimmerdriverpc%2F1.3%2Frmshimmerdriverpc-1.3.jar
+https://shimmersensing.jfrog.io/ui/repos/tree/General/ShimmerAPI%2Fcom%2Fshimmersensing%2FShimmerDriverPC%2F0.9.4beta%2FShimmerDriverPC-0.9.4beta.jar
 
 # Bintray Sunset
 The following ways of getting the library is **deprecated**
