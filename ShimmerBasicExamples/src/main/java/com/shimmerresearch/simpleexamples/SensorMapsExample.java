@@ -174,7 +174,12 @@ public class SensorMapsExample extends BasicProcessWithCallBack {
 		btnStartStreaming.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				
-				shimmer.startStreaming();
+				try {
+					shimmer.startStreaming();
+				} catch (ShimmerException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				
 			}
 		});
