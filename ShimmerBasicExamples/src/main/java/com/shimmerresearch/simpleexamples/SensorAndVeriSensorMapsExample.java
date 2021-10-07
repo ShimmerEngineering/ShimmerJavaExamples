@@ -48,7 +48,6 @@ public class SensorAndVeriSensorMapsExample extends BasicProcessWithCallBack {
 	private JFrame frame;
 	private JTextField textField;
 	JTextPane textPaneStatus;
-	static ShimmerPC shimmerPC = new ShimmerPC("ShimmerDevice"); 
 	static ShimmerDevice shimmerDevice;
 	static BasicShimmerBluetoothManagerPc btManager = new BasicShimmerBluetoothManagerPc();
 	BasicPlotManagerPC plotManager = new BasicPlotManagerPC();
@@ -102,14 +101,8 @@ public class SensorAndVeriSensorMapsExample extends BasicProcessWithCallBack {
 		JButton btnDisconnect = new JButton("DISCONNECT");
 		btnDisconnect.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				if(IsVerisenseDevice) {
-					btManager.disconnectShimmer(shimmerDevice);
-					IsVerisenseDevice = false;
-				}
-				else {
-					btManager.disconnectShimmer(shimmerPC);
-				}
+				btManager.disconnectShimmer(shimmerDevice);
+				IsVerisenseDevice = false;
 			}
 		});
 		btnDisconnect.setToolTipText("disconnect from Shimmer device");
@@ -134,29 +127,12 @@ public class SensorAndVeriSensorMapsExample extends BasicProcessWithCallBack {
 		JMenuItem mntmSelectSensors = new JMenuItem("Select sensors");
 		mntmSelectSensors.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				Boolean isConnected = false;
-				Boolean isStreaming = false;
-				Boolean isSDLogging = false;
-				if(IsVerisenseDevice) {
-					isConnected = shimmerDevice.isConnected();
-					isStreaming = shimmerDevice.isStreaming();
-					isSDLogging = shimmerDevice.isSDLogging();
-				}
-				else {
-					isConnected = shimmerPC.isConnected();
-					isStreaming = shimmerPC.isStreaming();
-					isSDLogging = shimmerPC.isSDLogging();
-				}
 				
 				//Ensure the Shimmer is not streaming or SD logging before configuring it
-				if(isConnected) {
-					if(!isStreaming && !isSDLogging) {
+				if(shimmerDevice.isConnected()) {
+					if(!shimmerDevice.isStreaming() && !shimmerDevice.isSDLogging()) {
 						EnableSensorsDialog sensorsDialog;
-						if(IsVerisenseDevice) {
-							sensorsDialog = new EnableSensorsDialog(shimmerDevice, btManager);
-						}else {
-							sensorsDialog = new EnableSensorsDialog(shimmerPC, btManager);
-						}
+						sensorsDialog = new EnableSensorsDialog(shimmerDevice, btManager);
 						sensorsDialog.showDialog();
 					} else {
 						JOptionPane.showMessageDialog(frame, "Cannot configure sensors!\nDevice is streaming or SDLogging", "Warning", JOptionPane.WARNING_MESSAGE);
@@ -175,28 +151,15 @@ public class SensorAndVeriSensorMapsExample extends BasicProcessWithCallBack {
 		JMenuItem mntmDeviceConfiguration = new JMenuItem("Sensor configuration");
 		mntmDeviceConfiguration.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Boolean isConnected = false;
-				Boolean isStreaming = false;
-				Boolean isSDLogging = false;
-				if(IsVerisenseDevice) {
-					isConnected = shimmerDevice.isConnected();
-					isStreaming = shimmerDevice.isStreaming();
-					isSDLogging = shimmerDevice.isSDLogging();
-				}
-				else {
-					isConnected = shimmerPC.isConnected();
-					isStreaming = shimmerPC.isStreaming();
-					isSDLogging = shimmerPC.isSDLogging();
-				}
 				
-				if(isConnected) {
-					if(!isStreaming && !isSDLogging) {
+				if(shimmerDevice.isConnected()) {
+					if(!shimmerDevice.isStreaming() && !shimmerDevice.isSDLogging()) {
 						SensorConfigDialog configDialog;
 						if(IsVerisenseDevice) {
 							configDialog = new SensorConfigDialog(shimmerDevice,btManager);
 						}
 						else {
-							configDialog = new SensorConfigDialog(shimmerPC,btManager);
+							configDialog = new SensorConfigDialog(shimmerDevice,btManager);
 						}
 						configDialog.showDialog();
 					} else {
@@ -227,12 +190,11 @@ public class SensorAndVeriSensorMapsExample extends BasicProcessWithCallBack {
 				SignalsToPlotDialog signalsToPlotDialog;
 				if(IsVerisenseDevice) {
 					signalsToPlotDialog = new SignalsToPlotDialog(true);
-					signalsToPlotDialog.initialize(shimmerDevice, plotManager, mChart);
 				}
 				else {
 					signalsToPlotDialog = new SignalsToPlotDialog();
-					signalsToPlotDialog.initialize(shimmerPC, plotManager, mChart);
 				}
+				signalsToPlotDialog.initialize(shimmerDevice, plotManager, mChart);
 			}
 		});
 		
@@ -243,13 +205,7 @@ public class SensorAndVeriSensorMapsExample extends BasicProcessWithCallBack {
 			public void actionPerformed(ActionEvent arg0) {
 				
 				try {
-					if(IsVerisenseDevice) {
-						shimmerDevice.startStreaming();
-					}
-					else {
-						shimmerPC.startStreaming();
-					}
-					
+					shimmerDevice.startStreaming();
 				} catch (ShimmerException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -263,16 +219,11 @@ public class SensorAndVeriSensorMapsExample extends BasicProcessWithCallBack {
 		JButton btnStopStreaming = new JButton("STOP STREAMING");
 		btnStopStreaming.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(IsVerisenseDevice) {
-					try {
-						shimmerDevice.stopStreaming();
-					} catch (ShimmerException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-				}
-				else {
-					shimmerPC.stopStreaming();
+				try {
+					shimmerDevice.stopStreaming();
+				} catch (ShimmerException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
 				}
 			}
 		});
@@ -322,7 +273,7 @@ public class SensorAndVeriSensorMapsExample extends BasicProcessWithCallBack {
 					shimmerDevice = btManager.getShimmerDeviceBtConnected(textField.getText().toUpperCase());
 				}
 				else {
-					shimmerPC = (ShimmerPC) btManager.getShimmerDeviceBtConnected(btComport);
+					shimmerDevice = btManager.getShimmerDeviceBtConnected(btComport);
 				}
 				
 //				shimmerDevice = btManager.getShimmerDeviceBtConnected(btComport);
