@@ -43,10 +43,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.awt.Canvas;
 
+
+
 public class SensorAndVeriSensorMapsExample extends BasicProcessWithCallBack {
 	
 	private JFrame frame;
 	private JTextField textField;
+	private JTextField textField2;
 	JTextPane textPaneStatus;
 	static ShimmerDevice shimmerDevice;
 	static BasicShimmerBluetoothManagerPc btManager = new BasicShimmerBluetoothManagerPc();
@@ -64,29 +67,41 @@ public class SensorAndVeriSensorMapsExample extends BasicProcessWithCallBack {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
-		JLabel lblSetComPort = new JLabel("Set COM Port");
-		lblSetComPort.setBounds(10, 60, 119, 23);
+		JLabel lblSetComPort = new JLabel("Set COM Port or Mac Id");
+		lblSetComPort.setBounds(10, 80, 119, 23);
 		frame.getContentPane().add(lblSetComPort);
 		
 		textField = new JTextField();
-		textField.setToolTipText("for example COM1, COM2, etc");
-		textField.setBounds(10, 91, 144, 29);
+		textField.setToolTipText("for example COM1, COM2, d0:2b:46:3d:a2:bb, etc");
+		textField.setBounds(10, 101, 144, 29);
 		frame.getContentPane().add(textField);
 		textField.setColumns(10);
 		
+		JLabel lblSetFriendlyName = new JLabel("Set Friendly Name");
+		lblSetFriendlyName.setBounds(10, 30, 119, 23);
+		frame.getContentPane().add(lblSetFriendlyName);
+		
+		textField2 = new JTextField();
+		textField2.setToolTipText("for example Verisense-19092501A2BB, Shimmer3-1E59, etc");
+		textField2.setBounds(10, 51, 144, 29);
+		frame.getContentPane().add(textField2);
+		textField2.setColumns(10);
+		
 		//textField.setText("e7:45:2c:6d:6f:14");
 		//textField.setText("d0:2b:46:3d:a2:bb");
-		//textField.setText("e7:ec:37:a0:d2:34");
-		textField.setText("COM5");
+		textField.setText("e7:ec:37:a0:d2:34");
+		//textField.setText("Com5");
+		//textField2.setText("Shimmer-1E59");
+		textField2.setText("Verisense-19092501A2BB");
 		
 		JButton btnConnect = new JButton("CONNECT");
 		btnConnect.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if(textField.getText().contains("COM")) {
+				if(textField2.getText().contains("Shimmer")) {
 					btComport = textField.getText();
 					btManager.connectShimmerThroughCommPort(btComport);
 				}
-				else {
+				else if(textField2.getText().contains("Verisense")) {
 					btManager.setPathToVeriBLEApp("bleconsoleapp\\BLEConsoleApp1.exe");
 					BluetoothDeviceDetails devDetails = new BluetoothDeviceDetails("", textField.getText(), "Verisense");
 					btManager.connectShimmerThroughBTAddress(devDetails);
