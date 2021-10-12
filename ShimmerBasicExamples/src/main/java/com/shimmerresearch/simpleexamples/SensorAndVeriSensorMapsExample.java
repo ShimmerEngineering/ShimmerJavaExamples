@@ -49,13 +49,14 @@ public class SensorAndVeriSensorMapsExample extends BasicProcessWithCallBack {
 	
 	private JFrame frame;
 	private JTextField textField;
-	private JTextField textField2;
+	private JTextField btFriendlyNameTextField;
 	JTextPane textPaneStatus;
 	static ShimmerDevice shimmerDevice;
 	static BasicShimmerBluetoothManagerPc btManager = new BasicShimmerBluetoothManagerPc();
 	BasicPlotManagerPC plotManager = new BasicPlotManagerPC();
 	String btComport;
-	Boolean IsVerisenseDevice = false;
+	String macAddress;
+	String btFriendlyName;
 	
 	/**
 	 * Initialize the contents of the frame
@@ -81,31 +82,32 @@ public class SensorAndVeriSensorMapsExample extends BasicProcessWithCallBack {
 		lblSetFriendlyName.setBounds(10, 30, 119, 23);
 		frame.getContentPane().add(lblSetFriendlyName);
 		
-		textField2 = new JTextField();
-		textField2.setToolTipText("for example Verisense-19092501A2BB, Shimmer3-1E59, etc");
-		textField2.setBounds(10, 51, 144, 29);
-		frame.getContentPane().add(textField2);
-		textField2.setColumns(10);
+		btFriendlyNameTextField = new JTextField();
+		btFriendlyNameTextField.setToolTipText("for example Verisense-19092501A2BB, Shimmer3-1E59, etc");
+		btFriendlyNameTextField.setBounds(10, 51, 144, 29);
+		frame.getContentPane().add(btFriendlyNameTextField);
+		btFriendlyNameTextField.setColumns(10);
 		
 		//textField.setText("e7:45:2c:6d:6f:14");
 		//textField.setText("d0:2b:46:3d:a2:bb");
 		textField.setText("e7:ec:37:a0:d2:34");
 		//textField.setText("Com5");
-		//textField2.setText("Shimmer-1E59");
-		textField2.setText("Verisense-19092501A2BB");
+		//textField2.setText("Shimmer-E6C8");
+		btFriendlyNameTextField.setText("Verisense-19092501A2BB");
 		
 		JButton btnConnect = new JButton("CONNECT");
 		btnConnect.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if(textField2.getText().contains("Shimmer")) {
+				btFriendlyName = btFriendlyNameTextField.getText();
+				if(btFriendlyName.contains("Shimmer")) {
 					btComport = textField.getText();
 					btManager.connectShimmerThroughCommPort(btComport);
 				}
-				else if(textField2.getText().contains("Verisense")) {
+				else if(btFriendlyName.contains("Verisense")) {
+					macAddress = textField.getText();
 					btManager.setPathToVeriBLEApp("bleconsoleapp\\BLEConsoleApp1.exe");
-					BluetoothDeviceDetails devDetails = new BluetoothDeviceDetails("", textField.getText(), "Verisense");
+					BluetoothDeviceDetails devDetails = new BluetoothDeviceDetails("", macAddress, "Verisense");
 					btManager.connectShimmerThroughBTAddress(devDetails);
-					IsVerisenseDevice = true;
 				}
 			}
 		});
@@ -117,7 +119,6 @@ public class SensorAndVeriSensorMapsExample extends BasicProcessWithCallBack {
 		btnDisconnect.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				btManager.disconnectShimmer(shimmerDevice);
-				IsVerisenseDevice = false;
 			}
 		});
 		btnDisconnect.setToolTipText("disconnect from Shimmer device");
@@ -170,12 +171,7 @@ public class SensorAndVeriSensorMapsExample extends BasicProcessWithCallBack {
 				if(shimmerDevice.isConnected()) {
 					if(!shimmerDevice.isStreaming() && !shimmerDevice.isSDLogging()) {
 						SensorConfigDialog configDialog;
-						if(IsVerisenseDevice) {
-							configDialog = new SensorConfigDialog(shimmerDevice,btManager);
-						}
-						else {
-							configDialog = new SensorConfigDialog(shimmerDevice,btManager);
-						}
+						configDialog = new SensorConfigDialog(shimmerDevice,btManager);
 						configDialog.showDialog();
 					} else {
 						JOptionPane.showMessageDialog(frame, "Cannot configure sensors!\nDevice is streaming or SDLogging", "Warning", JOptionPane.WARNING_MESSAGE);
@@ -203,12 +199,13 @@ public class SensorAndVeriSensorMapsExample extends BasicProcessWithCallBack {
 		mntmSignalsToPlot.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				SignalsToPlotDialog signalsToPlotDialog;
-				if(IsVerisenseDevice) {
+				if(btFriendlyName.contains("Verisense")) {
 					signalsToPlotDialog = new SignalsToPlotDialog(true);
 				}
 				else {
 					signalsToPlotDialog = new SignalsToPlotDialog();
 				}
+				
 				signalsToPlotDialog.initialize(shimmerDevice, plotManager, mChart);
 			}
 		});
@@ -284,14 +281,9 @@ public class SensorAndVeriSensorMapsExample extends BasicProcessWithCallBack {
 			} else if (callbackObject.mState == BT_STATE.CONNECTED) {
 				textPaneStatus.setText("connected");
 				
-				if(IsVerisenseDevice) {
-					shimmerDevice = btManager.getShimmerDeviceBtConnected(textField.getText().toUpperCase());
-				}
-				else {
-					shimmerDevice = btManager.getShimmerDeviceBtConnected(btComport);
-				}
+				String btComportOrMacAddress = btFriendlyName.contains("Verisense") ? macAddress.toUpperCase() : btComport;
+				shimmerDevice = btManager.getShimmerDeviceBtConnected(btComportOrMacAddress);
 				
-//				shimmerDevice = btManager.getShimmerDeviceBtConnected(btComport);
 				//shimmer.startStreaming();
 			} else if (callbackObject.mState == BT_STATE.DISCONNECTED
 //					|| callbackObject.mState == BT_STATE.NONE
