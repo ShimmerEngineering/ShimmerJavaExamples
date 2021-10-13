@@ -69,22 +69,22 @@ public class SensorMapsExample extends BasicProcessWithCallBack {
 		frame.getContentPane().setLayout(null);
 		
 		JLabel lblSetComPort = new JLabel("Set COM Port or Mac Id");
-		lblSetComPort.setBounds(10, 80, 119, 23);
+		lblSetComPort.setBounds(10, 100, 154, 23);
 		frame.getContentPane().add(lblSetComPort);
 		
 		textField = new JTextField();
 		textField.setToolTipText("for example COM1, COM2, d0:2b:46:3d:a2:bb, etc");
-		textField.setBounds(10, 101, 144, 29);
+		textField.setBounds(10, 121, 154, 29);
 		frame.getContentPane().add(textField);
 		textField.setColumns(10);
 		
 		JLabel lblSetFriendlyName = new JLabel("Set Friendly Name");
-		lblSetFriendlyName.setBounds(10, 30, 119, 23);
+		lblSetFriendlyName.setBounds(10, 40, 154, 23);
 		frame.getContentPane().add(lblSetFriendlyName);
 		
 		btFriendlyNameTextField = new JTextField();
 		btFriendlyNameTextField.setToolTipText("for example Verisense-19092501A2BB, Shimmer3-1E59, etc");
-		btFriendlyNameTextField.setBounds(10, 51, 144, 29);
+		btFriendlyNameTextField.setBounds(10, 61, 154, 29);
 		frame.getContentPane().add(btFriendlyNameTextField);
 		btFriendlyNameTextField.setColumns(10);
 		
@@ -112,7 +112,7 @@ public class SensorMapsExample extends BasicProcessWithCallBack {
 			}
 		});
 		btnConnect.setToolTipText("attempt connection to Shimmer device");
-		btnConnect.setBounds(185, 90, 199, 31);
+		btnConnect.setBounds(210, 90, 175, 31);
 		frame.getContentPane().add(btnConnect);
 		
 		JButton btnDisconnect = new JButton("DISCONNECT");
@@ -122,15 +122,15 @@ public class SensorMapsExample extends BasicProcessWithCallBack {
 			}
 		});
 		btnDisconnect.setToolTipText("disconnect from Shimmer device");
-		btnDisconnect.setBounds(415, 90, 187, 31);
+		btnDisconnect.setBounds(415, 90, 175, 31);
 		frame.getContentPane().add(btnDisconnect);
 		
 		JLabel lblShimmerStatus = new JLabel("Shimmer Status");
-		lblShimmerStatus.setBounds(10, 139, 144, 23);
+		lblShimmerStatus.setBounds(10, 160, 154, 23);
 		frame.getContentPane().add(lblShimmerStatus);
 		
 		textPaneStatus = new JTextPane();
-		textPaneStatus.setBounds(10, 181, 144, 36);
+		textPaneStatus.setBounds(10, 181, 154, 29);
 		frame.getContentPane().add(textPaneStatus);
 		
 		JMenuBar menuBar = new JMenuBar();
@@ -225,7 +225,7 @@ public class SensorMapsExample extends BasicProcessWithCallBack {
 				
 			}
 		});
-		btnStartStreaming.setBounds(185, 181, 199, 31);
+		btnStartStreaming.setBounds(210, 181, 175, 31);
 		frame.getContentPane().add(btnStartStreaming);
 		
 		JButton btnStopStreaming = new JButton("STOP STREAMING");
@@ -239,7 +239,7 @@ public class SensorMapsExample extends BasicProcessWithCallBack {
 				}
 			}
 		});
-		btnStopStreaming.setBounds(415, 181, 187, 31);
+		btnStopStreaming.setBounds(415, 181, 175, 31);
 		frame.getContentPane().add(btnStopStreaming);
 		
 		plotManager.setTitle("Plot");		
