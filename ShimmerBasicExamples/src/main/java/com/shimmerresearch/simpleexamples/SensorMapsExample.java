@@ -45,7 +45,7 @@ import java.awt.Canvas;
 
 
 
-public class SensorAndVeriSensorMapsExample extends BasicProcessWithCallBack {
+public class SensorMapsExample extends BasicProcessWithCallBack {
 	
 	private JFrame frame;
 	private JTextField textField;
@@ -247,7 +247,7 @@ public class SensorAndVeriSensorMapsExample extends BasicProcessWithCallBack {
 
 	public static void main(String args[]) {
 		//shimmer
-		SensorAndVeriSensorMapsExample s = new SensorAndVeriSensorMapsExample();
+		SensorMapsExample s = new SensorMapsExample();
 		
 		s.initialize();
 		s.frame.setVisible(true);
