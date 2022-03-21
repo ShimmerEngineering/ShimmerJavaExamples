@@ -18,6 +18,7 @@ import com.shimmerresearch.driver.Configuration.Shimmer3;
 import com.shimmerresearch.driver.Configuration.Shimmer3.SensorBitmap;
 import com.shimmerresearch.driverUtilities.AssembleShimmerConfig;
 import com.shimmerresearch.driverUtilities.SensorDetails;
+import com.shimmerresearch.exceptions.ShimmerException;
 import com.shimmerresearch.exgConfig.ExGConfigOptionDetails.EXG_CHIP_INDEX;
 import com.shimmerresearch.pcDriver.ShimmerPC;
 import com.shimmerresearch.tools.bluetooth.BasicShimmerBluetoothManagerPc;
@@ -68,7 +69,12 @@ public class ECGToHRExample extends BasicProcessWithCallBack{
 					//shimmerDevice.enableDefaultECGConfiguration();
 					//checkECGEnabled();	//Check if ECG is enabled first before streaming
 					heartRateCalculationECG = new ECGtoHRAdaptive(shimmerDevice.getSamplingRateShimmer());
-					shimmerDevice.startStreaming();
+					try {
+						shimmerDevice.startStreaming();
+					} catch (ShimmerException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					mConfigureOnFirstTime = false;
 				}
 			} else if (callbackObject.mState == BT_STATE.DISCONNECTED
