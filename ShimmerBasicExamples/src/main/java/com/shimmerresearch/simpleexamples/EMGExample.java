@@ -245,10 +245,10 @@ public class EMGExample extends BasicProcessWithCallBack {
 					AssembleShimmerConfig.generateSingleShimmerConfig(cloneDevice, COMMUNICATION_TYPE.BLUETOOTH);
 					btManager.configureShimmer(cloneDevice);
 			 		shimmer.writeShimmerAndSensorsSamplingRate(1024);
-				
-					String[] signal1 = {"test", "EMG_CH1_Filtered", "CAL", "mV"};
-					String[] signal2 = {"test", "EMG_CH2_Filtered", "CAL", "mV"};
-					String[] xAxis = {"test", Configuration.Shimmer3.ObjectClusterSensorName.SYSTEM_TIMESTAMP_PLOT, CHANNEL_TYPE.CAL.toString()};
+			 		
+					String[] signal1 = {shimmer.mShimmerUserAssignedName, "EMG_CH1_Filtered", "CAL", "mV"};
+					String[] signal2 = {shimmer.mShimmerUserAssignedName, "EMG_CH2_Filtered", "CAL", "mV"};
+					String[] xAxis = {shimmer.mShimmerUserAssignedName, Configuration.Shimmer3.ObjectClusterSensorName.SYSTEM_TIMESTAMP_PLOT, CHANNEL_TYPE.CAL.toString()};
 					try {
 						plotManager.addSignal(signal1, mChart);
 						plotManager.addSignal(signal2, mChart);
