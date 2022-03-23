@@ -75,7 +75,7 @@ public class EMGExample extends BasicProcessWithCallBack {
 	
 	public void initialize() {
 		frame = new JFrame("Shimmer EMG Example");
-		frame.setBounds(100, 100, 662, 591);
+		frame.setBounds(100, 100, 1362, 1068);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
@@ -171,13 +171,13 @@ public class EMGExample extends BasicProcessWithCallBack {
 		mnTools.add(mntmDeviceConfiguration);
 		
 		JPanel plotPanel = new JPanel();
-		plotPanel.setBounds(10, 236, 611, 272);
+		plotPanel.setBounds(10, 236, 1341, 706);
 		frame.getContentPane().add(plotPanel);
 		plotPanel.setLayout(null);
 		
 		mChart = new Chart2D();
 		mChart.setLocation(12, 13);
-		mChart.setSize(587, 246);
+		mChart.setSize(1329, 605);
 		plotPanel.add(mChart);
 		plotManager.addChart(mChart);
 		
