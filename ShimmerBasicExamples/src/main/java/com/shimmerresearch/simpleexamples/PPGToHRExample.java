@@ -18,6 +18,7 @@ import com.shimmerresearch.driver.Configuration.Shimmer3;
 import com.shimmerresearch.driver.Configuration.Shimmer3.DerivedSensorsBitMask;
 import com.shimmerresearch.driverUtilities.AssembleShimmerConfig;
 import com.shimmerresearch.driverUtilities.SensorDetails;
+import com.shimmerresearch.exceptions.ShimmerException;
 import com.shimmerresearch.driverUtilities.ChannelDetails.CHANNEL_TYPE;
 import com.shimmerresearch.pcDriver.ShimmerPC;
 import com.shimmerresearch.sensors.SensorPPG;
@@ -91,7 +92,12 @@ public class PPGToHRExample extends BasicProcessWithCallBack {
 			CallbackObject callbackObject = (CallbackObject)object;
 			int msg = callbackObject.mIndicator;
 			if (msg== ShimmerPC.NOTIFICATION_SHIMMER_FULLY_INITIALIZED){
-				shimmerDevice.startStreaming();
+				try {
+					shimmerDevice.startStreaming();
+				} catch (ShimmerException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 			if (msg == ShimmerPC.NOTIFICATION_SHIMMER_STOP_STREAMING) {
 				

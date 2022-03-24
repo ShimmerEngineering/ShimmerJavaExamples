@@ -1,15 +1,32 @@
 package com.shimmerresearch.simpleexamples;
 
-import javax.swing.JFrame;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Map;
 
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.JTextPane;
+
+import com.shimmerresearch.algorithms.Filter;
 import com.shimmerresearch.bluetooth.ShimmerBluetooth.BT_STATE;
 import com.shimmerresearch.driver.BasicProcessWithCallBack;
 import com.shimmerresearch.driver.CallbackObject;
 import com.shimmerresearch.driver.Configuration;
 import com.shimmerresearch.driver.ObjectCluster;
-import com.shimmerresearch.driver.ShimmerDevice;
 import com.shimmerresearch.driver.ShimmerMsg;
-import com.shimmerresearch.exceptions.ShimmerException;
+import com.shimmerresearch.driver.Configuration.COMMUNICATION_TYPE;
+import com.shimmerresearch.driverUtilities.AssembleShimmerConfig;
+import com.shimmerresearch.driverUtilities.ChannelDetails;
+import com.shimmerresearch.driverUtilities.ChannelDetails.CHANNEL_TYPE;
+import com.shimmerresearch.driverUtilities.SensorDetails;
 import com.shimmerresearch.guiUtilities.configuration.EnableSensorsDialog;
 import com.shimmerresearch.guiUtilities.configuration.SensorConfigDialog;
 import com.shimmerresearch.guiUtilities.configuration.SignalsToPlotDialog;
@@ -18,43 +35,47 @@ import com.shimmerresearch.pcDriver.ShimmerPC;
 import com.shimmerresearch.tools.bluetooth.BasicShimmerBluetoothManagerPc;
 
 import info.monitorenter.gui.chart.Chart2D;
+import uk.me.berndporr.iirj.Butterworth;
 
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JTextField;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JTextPane;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import javax.swing.JMenu;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.util.ArrayList;
-import java.util.List;
-import java.awt.Canvas;
-
-public class SensorMapsExample extends BasicProcessWithCallBack {
-	
-	private JFrame frame;
-	private JTextField textField;
-	JTextPane textPaneStatus;
-	static ShimmerPC shimmer = new ShimmerPC("ShimmerDevice"); 
-	static ShimmerDevice shimmerDevice;
+public class EMGExample extends BasicProcessWithCallBack {
+	static Butterworth butterworth = new Butterworth();
+	static Filter mFilterHPF_159;
+	static ShimmerPC shimmer = new ShimmerPC("ShimmerDevice");
 	static BasicShimmerBluetoothManagerPc btManager = new BasicShimmerBluetoothManagerPc();
-	BasicPlotManagerPC plotManager = new BasicPlotManagerPC();
-	String btComport;
+	static BasicPlotManagerPC plotManager = new BasicPlotManagerPC();
 	
-	/**
-	 * Initialize the contents of the frame
-	 * @wbp.parser.entryPoint
-	 */
+	private Chart2D mChart;
+	private boolean mConfigureOnFirstTime = true;
+	private JFrame frame;
+	private JTextField textFieldComPort;
+	private JTextPane textPaneStatus;
+	private String btComport;
+	
+	public static void main(String[] args) {
+		EMGExample s = new EMGExample();
+		s.initialize();
+		s.frame.setVisible(true);
+		s.setWaitForData(btManager.callBackObject);		
+		//s.setWaitForData(shimmer);
+		
+		//example usage when data is received, where x is data
+		//x = butterworth0_5.filter(x);
+		//x = mFilterHPF_159.filterData(x);
+	}
+	
+	public void initializeFilter() {
+		double[] mHPFc159 = {159};
+		try {
+			mFilterHPF_159 = new Filter(Filter.HIGH_PASS, 1024, mHPFc159);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		butterworth.highPass(4, 1024, 0.5);
+	}
+	
 	public void initialize() {
-		frame = new JFrame("Shimmer SensorMaps Example");
-		frame.setBounds(100, 100, 662, 591);
+		frame = new JFrame("Shimmer EMG Example");
+		frame.setBounds(100, 100, 1362, 1068);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
@@ -62,17 +83,17 @@ public class SensorMapsExample extends BasicProcessWithCallBack {
 		lblSetComPort.setBounds(10, 60, 119, 23);
 		frame.getContentPane().add(lblSetComPort);
 		
-		textField = new JTextField();
-		textField.setToolTipText("for example COM1, COM2, etc");
-		textField.setBounds(10, 91, 144, 29);
-		frame.getContentPane().add(textField);
-		textField.setColumns(10);
+		textFieldComPort = new JTextField();
+		textFieldComPort.setToolTipText("for example COM1, COM2, etc");
+		textFieldComPort.setBounds(10, 91, 144, 29);
+		frame.getContentPane().add(textFieldComPort);
+		textFieldComPort.setColumns(10);
 		
 		JButton btnConnect = new JButton("CONNECT");
 		btnConnect.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				
-				btComport = textField.getText();
+				btComport = textFieldComPort.getText();
 				btManager.connectShimmerThroughCommPort(btComport);
 				
 			}
@@ -115,7 +136,7 @@ public class SensorMapsExample extends BasicProcessWithCallBack {
 				//Ensure the Shimmer is not streaming or SD logging before configuring it
 				if(shimmer.isConnected()) {
 					if(!shimmer.isStreaming() && !shimmer.isSDLogging()) {
-						EnableSensorsDialog sensorsDialog = new EnableSensorsDialog(shimmer,btManager);
+						EnableSensorsDialog sensorsDialog = new EnableSensorsDialog(shimmer, btManager);
 						sensorsDialog.showDialog();
 					} else {
 						JOptionPane.showMessageDialog(frame, "Cannot configure sensors!\nDevice is streaming or SDLogging", "Warning", JOptionPane.WARNING_MESSAGE);
@@ -149,23 +170,24 @@ public class SensorMapsExample extends BasicProcessWithCallBack {
 		});
 		mnTools.add(mntmDeviceConfiguration);
 		
-		
 		JPanel plotPanel = new JPanel();
-		plotPanel.setBounds(10, 236, 611, 272);
+		plotPanel.setBounds(10, 236, 1341, 706);
 		frame.getContentPane().add(plotPanel);
 		plotPanel.setLayout(null);
 		
-		final Chart2D mChart = new Chart2D();
+		mChart = new Chart2D();
 		mChart.setLocation(12, 13);
-		mChart.setSize(587, 246);
+		mChart.setSize(1329, 605);
 		plotPanel.add(mChart);
 		plotManager.addChart(mChart);
 		
 		JMenuItem mntmSignalsToPlot = new JMenuItem("Signals to plot");
 		mntmSignalsToPlot.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
 				SignalsToPlotDialog signalsToPlotDialog = new SignalsToPlotDialog();
 				signalsToPlotDialog.initialize(shimmer, plotManager, mChart);
+				
 			}
 		});
 		mnTools.add(mntmSignalsToPlot);
@@ -176,8 +198,7 @@ public class SensorMapsExample extends BasicProcessWithCallBack {
 				
 				try {
 					shimmer.startStreaming();
-				} catch (ShimmerException e) {
-					// TODO Auto-generated catch block
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 				
@@ -197,24 +218,14 @@ public class SensorMapsExample extends BasicProcessWithCallBack {
 		btnStopStreaming.setBounds(415, 181, 187, 31);
 		frame.getContentPane().add(btnStopStreaming);
 		
-		plotManager.setTitle("Plot");		
+		plotManager.setTitle("Plot");
+		
+		initializeFilter();
 	}
 
-	public static void main(String args[]) {
-		SensorMapsExample s = new SensorMapsExample();
-		s.initialize();
-		s.frame.setVisible(true);
-		s.setWaitForData(btManager.callBackObject);		
-		//s.setWaitForData(shimmer);
-	}
-	
 	@Override
 	protected void processMsgFromCallback(ShimmerMsg shimmerMSG) {
-		// TODO Auto-generated method stub
-
-		// TODO Auto-generated method stub
 		  int ind = shimmerMSG.mIdentifier;
-
 		  Object object = (Object) shimmerMSG.mB;
 
 		if (ind == ShimmerPC.MSG_IDENTIFIER_STATE_CHANGE) {
@@ -225,8 +236,30 @@ public class SensorMapsExample extends BasicProcessWithCallBack {
 			} else if (callbackObject.mState == BT_STATE.CONNECTED) {
 				textPaneStatus.setText("connected");
 				shimmer = (ShimmerPC) btManager.getShimmerDeviceBtConnected(btComport);
-//				shimmerDevice = btManager.getShimmerDeviceBtConnected(btComport);
-				//shimmer.startStreaming();
+				
+				if (mConfigureOnFirstTime){
+					ShimmerPC cloneDevice = shimmer.deepClone();
+					cloneDevice.setEnabledAndDerivedSensorsAndUpdateMaps(0, 0);
+					cloneDevice.setSensorEnabledState(Configuration.Shimmer3.SENSOR_ID.HOST_EMG, true);
+					shimmer.enableDefaultEMGConfiguration();
+					AssembleShimmerConfig.generateSingleShimmerConfig(cloneDevice, COMMUNICATION_TYPE.BLUETOOTH);
+					btManager.configureShimmer(cloneDevice);
+			 		shimmer.writeShimmerAndSensorsSamplingRate(1024);
+			 		
+					String[] signal1 = {shimmer.mShimmerUserAssignedName, "EMG_CH1_Filtered", "CAL", "mV"};
+					String[] signal2 = {shimmer.mShimmerUserAssignedName, "EMG_CH2_Filtered", "CAL", "mV"};
+					String[] xAxis = {shimmer.mShimmerUserAssignedName, Configuration.Shimmer3.ObjectClusterSensorName.SYSTEM_TIMESTAMP_PLOT, CHANNEL_TYPE.CAL.toString()};
+					try {
+						plotManager.addSignal(signal1, mChart);
+						plotManager.addSignal(signal2, mChart);
+						plotManager.addXAxis(xAxis);
+						plotManager.setYAxisRange(-2, 2);
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
+					mConfigureOnFirstTime = false;
+				}
+				
 			} else if (callbackObject.mState == BT_STATE.DISCONNECTED
 //					|| callbackObject.mState == BT_STATE.NONE
 					|| callbackObject.mState == BT_STATE.CONNECTION_LOST){
@@ -236,6 +269,7 @@ public class SensorMapsExample extends BasicProcessWithCallBack {
 			CallbackObject callbackObject = (CallbackObject)object;
 			int msg = callbackObject.mIndicator;
 			if (msg== ShimmerPC.NOTIFICATION_SHIMMER_FULLY_INITIALIZED){
+				
 				textPaneStatus.setText("device fully initialized");
 			}
 			if (msg == ShimmerPC.NOTIFICATION_SHIMMER_STOP_STREAMING) {
@@ -248,6 +282,16 @@ public class SensorMapsExample extends BasicProcessWithCallBack {
 			ObjectCluster objc = (ObjectCluster) shimmerMSG.mB;
 			
 			try {
+				double ch1 = objc.mCalData[2];
+				ch1 = butterworth.filter(ch1);
+				ch1 = mFilterHPF_159.filterData(ch1);
+				objc.addDataToMap("EMG_CH1_Filtered", "CAL", "mV", ch1, false);
+				
+//				double ch2 = objc.mCalData[3];
+//				ch2 = butterworth.filter(ch2);
+//				ch2 = mFilterHPF_159.filterData(ch2);
+//				objc.addDataToMap("EMG_CH2_Filtered", "CAL", "mV", ch2, false);
+				
 				plotManager.filterDataAndPlot(objc);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -256,10 +300,5 @@ public class SensorMapsExample extends BasicProcessWithCallBack {
 		} else if (ind == ShimmerPC.MSG_IDENTIFIER_PACKET_RECEPTION_RATE_OVERALL) {
 			
 		}
-	
-	
-		
-		
 	}
 }
-
