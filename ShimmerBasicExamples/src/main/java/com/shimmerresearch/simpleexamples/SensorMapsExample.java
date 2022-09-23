@@ -286,6 +286,7 @@ public class SensorMapsExample extends BasicProcessWithCallBack {
 				textPaneStatus.setText("device stopped streaming");
 			} else if (msg == ShimmerPC.NOTIFICATION_SHIMMER_START_STREAMING) {
 				textPaneStatus.setText("device streaming");
+				comboBoxCRC.setEnabled(false);
 			} else {}
 		} else if (ind == ShimmerPC.MSG_IDENTIFIER_DATA_PACKET) {
 			System.out.println("Shimmer MSG_IDENTIFIER_DATA_PACKET");
