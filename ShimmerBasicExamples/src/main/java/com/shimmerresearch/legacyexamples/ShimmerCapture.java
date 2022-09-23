@@ -148,6 +148,7 @@ public class ShimmerCapture extends BasicProcessWithCallBack{
 	private JLabel lblSignals;
 	private JLabel lblNumberOfBeats;
 	
+	private JComboBox<String> comboBoxCRC;
 	private JComboBox<String> comboBoxSamplingRate;
 	private JComboBox<String> comboBoxAccelRange;
 	private JComboBox<String> comboBoxGyroRange;
@@ -356,7 +357,6 @@ public class ShimmerCapture extends BasicProcessWithCallBack{
 			public void actionPerformed(ActionEvent arg0) {
 				System.out.println("Connect");
 				mShimmer.connect(textFieldComPort.getText(),"");
-				
 			}
 		});
 		btnConnect.setBounds(140, 45, 98, 25);
@@ -375,8 +375,30 @@ public class ShimmerCapture extends BasicProcessWithCallBack{
 				//mShimmer = new ShimmerPC("ShimmerDevice", true);
 			}
 		});
-		btnDisconnect.setBounds(252, 45, 98, 25);
+		btnDisconnect.setBounds(364, 45, 98, 25);
 		frame.getContentPane().add(btnDisconnect);
+		
+		String options[]={"Disable CRC","Enable 1 byte CRC","Enable 2 byte CRC"};        
+		comboBoxCRC = new JComboBox(options);
+		comboBoxCRC.setEnabled(false);
+		comboBoxCRC.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				switch(comboBoxCRC.getSelectedIndex()) {
+				  case 0:
+					mShimmer.disableBtCommsCrc();
+				    break;
+				  case 1:
+					mShimmer.enableBtCommsOneByteCrc();
+				    break;
+				  case 2:
+					mShimmer.enableBtCommsTwoByteCrc();
+				    break;
+				  default:
+				}
+			}
+		});
+		comboBoxCRC.setBounds(252, 45, 98, 25);
+		frame.getContentPane().add(comboBoxCRC);
 
 		btnStartStreaming = new JButton("Stream");
 		btnStartStreaming.addActionListener(new ActionListener() {
@@ -446,7 +468,7 @@ public class ShimmerCapture extends BasicProcessWithCallBack{
 		textFieldComPort.setColumns(10);
 
 		textFieldState = new JTextField();
-		textFieldState.setBounds(450, 46, 150, 24);
+		textFieldState.setBounds(470, 46, 150, 24);
 		frame.getContentPane().add(textFieldState);
 		textFieldState.setColumns(10);
 		textFieldState.setText("Shimmer Disconnected");
@@ -462,7 +484,7 @@ public class ShimmerCapture extends BasicProcessWithCallBack{
 		frame.getContentPane().add(lblSelectComPort);
 		
 		lblShimmerState = new JLabel("Shimmer State");
-		lblShimmerState.setBounds(450, 32, 98, 14);
+		lblShimmerState.setBounds(470, 32, 98, 14);
 		frame.getContentPane().add(lblShimmerState);
 		
 		lblSignals = new JLabel("Signals to View");
@@ -2230,6 +2252,10 @@ public class ShimmerCapture extends BasicProcessWithCallBack{
 				btnConnect.setEnabled(false);
 				btnDisconnect.setEnabled(true);
 				
+				if(mShimmer.getFirmwareVersionCode() >= 8) {
+					comboBoxCRC.setEnabled(true);
+				}
+				
 			} else if (callbackObject.mState == BT_STATE.DISCONNECTED
 //					|| callbackObject.mState == BT_STATE.NONE
 					|| callbackObject.mState == BT_STATE.CONNECTION_LOST){
@@ -2237,6 +2263,7 @@ public class ShimmerCapture extends BasicProcessWithCallBack{
 				textFieldState.setText("Shimmer Disconnected");
 				textFieldMessage.setText("");
 				btnDisconnect.setEnabled(false);
+				comboBoxCRC.setEnabled(false);
 				btnConnect.setEnabled(true);
 				btnStartStreaming.setEnabled(false);
 				btnStopStreaming.setEnabled(false);
