@@ -27,6 +27,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JTextPane;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -41,6 +42,7 @@ public class SensorMapsExample extends BasicProcessWithCallBack {
 	
 	private JFrame frame;
 	private JTextField textField;
+	private JComboBox<String> comboBoxCRC;
 	JTextPane textPaneStatus;
 	static ShimmerPC shimmer = new ShimmerPC("ShimmerDevice"); 
 	static ShimmerDevice shimmerDevice;
@@ -78,19 +80,42 @@ public class SensorMapsExample extends BasicProcessWithCallBack {
 			}
 		});
 		btnConnect.setToolTipText("attempt connection to Shimmer device");
-		btnConnect.setBounds(185, 90, 199, 31);
+		btnConnect.setBounds(185, 90, 125, 31);
 		frame.getContentPane().add(btnConnect);
+		
+		String options[]={"Disable CRC","Enable 1 byte CRC","Enable 2 byte CRC"};        
+		comboBoxCRC = new JComboBox(options);
+		comboBoxCRC.setEnabled(false);
+		comboBoxCRC.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(comboBoxCRC.isEnabled()) {
+					switch(comboBoxCRC.getSelectedIndex()) {
+					  case 0:
+						shimmer.disableBtCommsCrc();
+					    break;
+					  case 1:
+						shimmer.enableBtCommsOneByteCrc();
+					    break;
+					  case 2:
+						shimmer.enableBtCommsTwoByteCrc();
+					    break;
+					  default:
+					}
+				}
+			}
+		});
+		comboBoxCRC.setBounds(330, 90, 125, 31);
+		frame.getContentPane().add(comboBoxCRC);
 		
 		JButton btnDisconnect = new JButton("DISCONNECT");
 		btnDisconnect.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
 				btManager.disconnectShimmer(shimmer);
-				
 			}
 		});
 		btnDisconnect.setToolTipText("disconnect from Shimmer device");
-		btnDisconnect.setBounds(415, 90, 187, 31);
+		btnDisconnect.setBounds(475, 90, 125, 31);
 		frame.getContentPane().add(btnDisconnect);
 		
 		JLabel lblShimmerStatus = new JLabel("Shimmer Status");
@@ -225,12 +250,31 @@ public class SensorMapsExample extends BasicProcessWithCallBack {
 			} else if (callbackObject.mState == BT_STATE.CONNECTED) {
 				textPaneStatus.setText("connected");
 				shimmer = (ShimmerPC) btManager.getShimmerDeviceBtConnected(btComport);
+				
+				if(shimmer.getFirmwareVersionCode() >= 8) {
+					if(!comboBoxCRC.isEnabled()) {
+						switch(shimmer.getBtCommsCrcModeIfFwSupported()) {
+		                    case OFF:
+		                    	comboBoxCRC.setSelectedIndex(0);
+		                        break;
+		                    case ONE_BYTE_CRC:
+		                    	comboBoxCRC.setSelectedIndex(1);
+		                        break;
+		                    case TWO_BYTE_CRC:
+		                    	comboBoxCRC.setSelectedIndex(2);
+		                        break;
+		                    default:
+						}
+					}
+					comboBoxCRC.setEnabled(true);
+				}
 //				shimmerDevice = btManager.getShimmerDeviceBtConnected(btComport);
 				//shimmer.startStreaming();
 			} else if (callbackObject.mState == BT_STATE.DISCONNECTED
 //					|| callbackObject.mState == BT_STATE.NONE
 					|| callbackObject.mState == BT_STATE.CONNECTION_LOST){
-				textPaneStatus.setText("disconnected");				
+				textPaneStatus.setText("disconnected");
+				comboBoxCRC.setEnabled(false);
 			}
 		} else if (ind == ShimmerPC.MSG_IDENTIFIER_NOTIFICATION_MESSAGE) {
 			CallbackObject callbackObject = (CallbackObject)object;
