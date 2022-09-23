@@ -86,6 +86,7 @@ import com.shimmerresearch.biophysicalprocessing.ECGtoHRAdaptive;
 import com.shimmerresearch.biophysicalprocessing.ECGtoHRAlgorithm;
 import com.shimmerresearch.biophysicalprocessing.PPGtoHRAlgorithm;
 import com.shimmerresearch.bluetooth.ShimmerBluetooth;
+import com.shimmerresearch.bluetooth.ShimmerBluetooth.BT_CRC_MODE;
 import com.shimmerresearch.bluetooth.ShimmerBluetooth.BT_STATE;
 import com.shimmerresearch.driver.BasicProcessWithCallBack;
 import com.shimmerresearch.driver.CallbackObject;
@@ -383,17 +384,19 @@ public class ShimmerCapture extends BasicProcessWithCallBack{
 		comboBoxCRC.setEnabled(false);
 		comboBoxCRC.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				switch(comboBoxCRC.getSelectedIndex()) {
-				  case 0:
-					mShimmer.disableBtCommsCrc();
-				    break;
-				  case 1:
-					mShimmer.enableBtCommsOneByteCrc();
-				    break;
-				  case 2:
-					mShimmer.enableBtCommsTwoByteCrc();
-				    break;
-				  default:
+				if(comboBoxCRC.isEnabled()) {
+					switch(comboBoxCRC.getSelectedIndex()) {
+					  case 0:
+						mShimmer.disableBtCommsCrc();
+					    break;
+					  case 1:
+						mShimmer.enableBtCommsOneByteCrc();
+					    break;
+					  case 2:
+						mShimmer.enableBtCommsTwoByteCrc();
+					    break;
+					  default:
+					}
 				}
 			}
 		});
@@ -2253,6 +2256,20 @@ public class ShimmerCapture extends BasicProcessWithCallBack{
 				btnDisconnect.setEnabled(true);
 				
 				if(mShimmer.getFirmwareVersionCode() >= 8) {
+					if(!comboBoxCRC.isEnabled()) {
+						switch(mShimmer.getBtCommsCrcModeIfFwSupported()) {
+		                    case OFF:
+		                    	comboBoxCRC.setSelectedIndex(0);
+		                        break;
+		                    case ONE_BYTE_CRC:
+		                    	comboBoxCRC.setSelectedIndex(1);
+		                        break;
+		                    case TWO_BYTE_CRC:
+		                    	comboBoxCRC.setSelectedIndex(2);
+		                        break;
+		                    default:
+						}
+					}
 					comboBoxCRC.setEnabled(true);
 				}
 				
