@@ -94,7 +94,7 @@ public class PPGToHRExample extends BasicProcessWithCallBack {
 			if (msg== ShimmerPC.NOTIFICATION_SHIMMER_FULLY_INITIALIZED){
 				try {
 					shimmerDevice.startStreaming();
-				} catch (ShimmerException e) {
+				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}

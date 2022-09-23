@@ -121,7 +121,7 @@ public class ShimmerCapture extends BasicProcessWithCallBack{
 	private JFrame frame;
 	private JFrame configFrame;
 	private JFrame exgFrame;
-	ShimmerPC mShimmer = new ShimmerPC("ShimmerDevice", true);
+	ShimmerPC mShimmer = new ShimmerPC("", "", "ShimmerDevice", true);
 	
 	
 	private JButton btnStartStreaming;
@@ -444,7 +444,7 @@ public class ShimmerCapture extends BasicProcessWithCallBack{
 				
 				try {
 					mShimmer.startStreaming();
-				} catch (ShimmerException e1) {
+				} catch (Exception e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}

@@ -176,7 +176,7 @@ public class SensorMapsExample extends BasicProcessWithCallBack {
 				
 				try {
 					shimmer.startStreaming();
-				} catch (ShimmerException e) {
+				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
