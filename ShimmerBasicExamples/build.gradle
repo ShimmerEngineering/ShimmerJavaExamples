@@ -19,7 +19,10 @@ repositories {
        dirs 'libs'
    }
        maven {
-        url 'https://shimmersensing.jfrog.io/artifactory/ShimmerAPI'
+        name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/ShimmerEngineering/Shimmer-Java-Android-API")
+            credentials {
+            }
     }
 }
 
@@ -28,7 +31,11 @@ dependencies {
     // The production code uses the SLF4J logging API at compile time
     compile 'org.slf4j:slf4j-api:1.7.21'
 	//compile(group: 'com.shimmersensing', name: 'ShimmerDriverPC', version: '0.9.4beta')
-	compile(group: 'com.shimmersensing', name: 'ShimmerDriverPCDev', version: 'JA-79 v0.1')
+	//compile(group: 'com.shimmersensing', name: 'ShimmerDriverPCDev', version: 'JA-79 v0.1')
+	//implementation 'com.shimmerresearch:shimmerdriverpc'
+	compile(group: 'com.shimmerresearch', name: 'shimmerdriverpc', version: '0.10.0_alpha')
+	compile(group: 'com.shimmerresearch', name: 'shimmerdriver', version: '0.10.0_alpha')
+	compile(group: 'com.shimmerresearch', name: 'shimmerbluetoothmanager', version: '0.10.0_alpha')
     compile name: 'ShimmerBiophysicalProcessingLibrary_Rev_0_11'
 
     // Declare the dependency for your favourite test framework you want to use in your tests.

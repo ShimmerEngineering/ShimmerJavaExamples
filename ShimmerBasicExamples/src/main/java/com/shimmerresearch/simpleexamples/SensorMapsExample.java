@@ -253,7 +253,8 @@ public class SensorMapsExample extends BasicProcessWithCallBack {
 				
 				if(shimmer.getFirmwareVersionCode() >= 8) {
 					if(!comboBoxCRC.isEnabled()) {
-						switch(shimmer.getBtCommsCrcModeIfFwSupported()) {
+						if (shimmer.isBtCrcModeSupported()) {
+						switch(shimmer.getCurrentBtCommsCrcMode()) {
 		                    case OFF:
 		                    	comboBoxCRC.setSelectedIndex(0);
 		                        break;
@@ -265,7 +266,8 @@ public class SensorMapsExample extends BasicProcessWithCallBack {
 		                        break;
 		                    default:
 						}
-					}
+						}
+						}
 					comboBoxCRC.setEnabled(true);
 				}
 //				shimmerDevice = btManager.getShimmerDeviceBtConnected(btComport);
