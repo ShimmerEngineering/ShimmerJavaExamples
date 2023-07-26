@@ -1,6 +1,6 @@
 # Important ~ Migration to Github Packages
 With JFrog removing services we have migrated to using Github Packages. This would be a good [starting point](https://docs.github.com/en/packages/learn-github-packages/installing-a-package).
-[Shimmer Java Android API Packages](https://github.com/ShimmerEngineering?tab=packages&repo_name=Shimmer-Java-Android-API)
+The [packages](https://github.com/ShimmerEngineering?tab=packages&repo_name=Shimmer-Java-Android-API) can be found here.
 Also to be noted, the Shimmer Java Android API repository has now been made public. Contributions are welcomed.
 
 # Important ~ Migration to JFrog
