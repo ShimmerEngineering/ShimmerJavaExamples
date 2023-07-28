@@ -53,3 +53,5 @@ JavaShimmerConnect/.settings/org.eclipse.jdt.core.prefs
 ShimmerDriver/.settings/org.eclipse.jdt.core.prefs
 ShimmerAndroidInstrumentDriver/gen/com/shimmerresearch/androidinstrumentdriver/BuildConfig.java
 ShimmerAndroidInstrumentDriver/gen/com/shimmerresearch/androidinstrumentdriver/R.java
+ShimmerBasicExamples/gradle.properties
+gradle.properties
