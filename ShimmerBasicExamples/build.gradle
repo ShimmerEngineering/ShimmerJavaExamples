@@ -10,6 +10,8 @@
 // Apply the java plugin to add support for Java
 apply plugin: 'java'
 
+sourceCompatibility = 1.8
+
 // In this section you declare where to find the dependencies of your project
 repositories {
     // Use 'jcenter' for resolving your dependencies.
@@ -17,15 +19,21 @@ repositories {
     jcenter()
     flatDir {
        dirs 'libs'
-   }
-       maven {
+    }
+    maven {
         name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/ShimmerEngineering/Shimmer-Java-Android-API")
-            credentials {
-                /**Create github.properties in root project folder file with gpr.usr=GITHUB_USER_ID  & gpr.key=PERSONAL_ACCESS_TOKEN**/
-                username = githubProperties['gpr.usr'] ?: System.getenv("GPR_USER")
-                password = githubProperties['gpr.key'] ?: System.getenv("GPR_API_KEY")
-            }
+        url = uri("https://maven.pkg.github.com/ShimmerEngineering/Shimmer-Java-Android-API")
+        credentials {
+            /* Create gradle.properties file in GRADLE_USER_HOME/.gradle/ 
+            (e.g. C:/Users/YourUsername/.gradle/) with the two lines listed below. Fill in your 
+            Github ID and personal access token - as generated through the Github Developer 
+            Settings page. The token needs to have "read:packages" scope enabled on it: 
+                gpr.usr=GITHUB_USER_ID 
+                gpr.key=PERSONAL_ACCESS_TOKEN 
+            */
+            username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
+            password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
+        }
     }
 }
 
@@ -33,12 +41,9 @@ repositories {
 dependencies {
     // The production code uses the SLF4J logging API at compile time
     compile 'org.slf4j:slf4j-api:1.7.21'
-	//compile(group: 'com.shimmersensing', name: 'ShimmerDriverPC', version: '0.9.4beta')
-	//compile(group: 'com.shimmersensing', name: 'ShimmerDriverPCDev', version: 'JA-79 v0.1')
-	//implementation 'com.shimmerresearch:shimmerdriverpc'
+
 	compile(group: 'com.shimmerresearch', name: 'shimmerdriverpc', version: '0.10.0_alpha')
-	compile(group: 'com.shimmerresearch', name: 'shimmerdriver', version: '0.10.0_alpha')
-	compile(group: 'com.shimmerresearch', name: 'shimmerbluetoothmanager', version: '0.10.0_alpha')
+	
     compile name: 'ShimmerBiophysicalProcessingLibrary_Rev_0_11'
 
     // Declare the dependency for your favourite test framework you want to use in your tests.
