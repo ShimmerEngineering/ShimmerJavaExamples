@@ -34,6 +34,7 @@ repositories {
 		/* should the above not work key in your username and password directly e.g.
   		username = "username"
   		password = "password"
+    		DO NOT commit your username and password
     		*/
             }
     }
